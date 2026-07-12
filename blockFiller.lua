@@ -1,6 +1,6 @@
 local x, y, z
 local startX, startY, startZ = gps.locate()
-local endX, endY, endZ = 21, 77, -36
+local endX, endY, endZ = 0, 0, 0
 local targetX, targetY, targetZ = endX, endY, endZ
 local diffX, diffY, diffZ = startX - endX, startY - endY, startZ - endZ
 local running = true
@@ -35,9 +35,9 @@ local function zigZagToLocation()
         -- Swap start and end (Lua evaluates left side first, can swap without temp vars)
         startX, endX = endX, startX
         startZ, endZ = endZ, startZ
-        if diffZ % 2 == 0 then
+        if targetX == endX and targetX == x then
             targetX = startX
-        else
+        elseif targetX == startX and targetX == x then
             targetX = endX
         end
     end
@@ -67,11 +67,5 @@ end
 
 while running do
     x, y, z = gps.locate()
-
-    if diffZ % 2 == 0 then
-        targetX = startX
-    end
     zigZagToLocation()
-
-    sleep(0.5)
 end
