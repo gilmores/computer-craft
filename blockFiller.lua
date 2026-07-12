@@ -1,11 +1,14 @@
-local pos
-
+local x, y, z
+ 
 while true do
-    pos = gps.locate()
-    print(pos)
+    x, y, z = gps.locate()
+    print("x: "..x)
+    print("y: "..y)
+    print("z: "..z)
     sleep(1)
 end
-
+ 
 local function moveToLocation()
-
+ 
 end
+ 
