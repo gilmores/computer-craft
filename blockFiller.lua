@@ -2,7 +2,7 @@ local pos
 
 while true do
     pos = gps.locate()
-    print(type(pos))
+    print(pos)
     sleep(1)
 end
 
