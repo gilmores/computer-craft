@@ -65,7 +65,34 @@ local function zigZagToLocation()
     end
 end
 
+local function equipStoneBlock()
+    local itemDetail = turtle.getItemDetail(nil, true)
+    if itemDetail == nil or not (itemDetail["tags"]["forge:stone"] or itemDetail["tags"]["forge:cobblestone"]) then
+        for i = 1, 16, 1 do
+            local itemTags = turtle.getItemDetail(i, true)["tags"]
+            if itemTags["forge:stone"] or itemTags["forge:cobblestone"] then
+                turtle.select(i)
+                return
+            end
+        end
+        print("Error: out of stone or cobblestone type blocks.")
+    end
+end
+
+local function placeBlockAboveIfWater()
+    local blockPresent, blockData = turtle.inspectUp()
+    if blockData.name == "minecraft.water" then
+        equipStoneBlock()
+        turtle.placeUp()
+    end
+end
+
+if endX == 0 and endY == 0 and endZ == 0 then
+    print("Error: missing coordinates at top of file.")
+    return
+end
 while running do
     x, y, z = gps.locate()
     zigZagToLocation()
+    placeBlockAboveIfWater()
 end
