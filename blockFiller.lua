@@ -15,7 +15,7 @@ local function digForward()
     turtle.forward()
 end
 
-local function zigZagToLocation(targetX, targetY, targetZ)
+local function zigZagToLocation()
     if x == targetX and y == targetY and z == targetZ then
         running = false
     end
@@ -45,7 +45,7 @@ end
 while running do
     x, y, z = gps.locate()
 
-    zigZagToLocation(targetX, targetY, targetZ)
+    zigZagToLocation()
 
     sleep(0.5)
 end
