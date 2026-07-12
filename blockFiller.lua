@@ -66,12 +66,12 @@ end
 
 local function equipStoneBlock()
     local itemDetail = turtle.getItemDetail(nil, true)
-    if itemDetail == nil or not (itemDetail["tags"]["forge:stone"] or itemDetail["tags"]["forge:cobblestone"] or itemDetail["tags"]["forge:dirt"]) then
+    if itemDetail == nil or not (itemDetail["tags"]["forge:stone"] or itemDetail["tags"]["forge:cobblestone"]) then
         for i = 1, 16, 1 do
             local itemDetails = turtle.getItemDetail(i, true)
             if itemDetails ~= nil then
                 local itemTags = itemDetails["tags"]
-                if itemTags["forge:stone"] or itemTags["forge:cobblestone"] or itemTags["forge:dirt"] then
+                if itemTags["forge:stone"] or itemTags["forge:cobblestone"] then
                     turtle.select(i)
                     return
                 end
