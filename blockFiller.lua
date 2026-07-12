@@ -40,9 +40,8 @@ local function zigZagToLocation()
         elseif targetX == startX and targetX == x then
             targetX = endX
         end
-    end
     -- End of column condition
-    if x == targetX then
+    elseif x == targetX then
         -- Turn, move Z forward 1, turn, continue on x
         if leftTurn then
             turtle.turnLeft()
@@ -67,12 +66,15 @@ end
 
 local function equipStoneBlock()
     local itemDetail = turtle.getItemDetail(nil, true)
-    if itemDetail == nil or not (itemDetail["tags"]["forge:stone"] or itemDetail["tags"]["forge:cobblestone"]) then
+    if itemDetail == nil or not (itemDetail["tags"]["forge:stone"] or itemDetail["tags"]["forge:cobblestone"] or itemDetail["tags"]["forge:dirt"]) then
         for i = 1, 16, 1 do
-            local itemTags = turtle.getItemDetail(i, true)["tags"]
-            if itemTags["forge:stone"] or itemTags["forge:cobblestone"] then
-                turtle.select(i)
-                return
+            local itemDetails = turtle.getItemDetail(i, true)
+            if itemDetails ~= nil then
+                local itemTags = itemDetails["tags"]
+                if itemTags["forge:stone"] or itemTags["forge:cobblestone"] or itemTags["forge:dirt"] then
+                    turtle.select(i)
+                    return
+                end
             end
         end
         print("Error: out of stone or cobblestone type blocks.")
