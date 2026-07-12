@@ -2,6 +2,7 @@ local x, y, z
 local startX, startY, startZ = gps.locate()
 local endX, endY, endZ = 21, 77, -36
 local targetX, targetY, targetZ = endX, endY, endZ
+local diffX, diffY, diffZ = startX - endX, startY - endY, startZ - endZ
 local running = true
 
 local forwardX = true
@@ -16,9 +17,31 @@ local function digForward()
 end
 
 local function zigZagToLocation()
-    if x == targetX and y == targetY and z == targetZ then
+    -- End condition
+    if x == targetX and y == endY and z == endZ then
         running = false
+        return
     end
+    -- End of row and column condition
+    if x == targetX and z == endZ then
+        -- Descend
+        if turtle.detectDown() then
+            turtle.digDown()
+        end
+        turtle.down()
+        -- U-turn
+        turtle.turnLeft()
+        turtle.turnLeft()
+        -- Swap start and end (Lua evaluates left side first, can swap without temp vars)
+        startX, endX = endX, startX
+        startZ, endZ = endZ, startZ
+        if diffZ % 2 == 0 then
+            targetX = startX
+        else
+            targetX = endX
+        end
+    end
+    -- End of column condition
     if x == targetX then
         -- Turn, move Z forward 1, turn, continue on x
         if leftTurn then
@@ -45,6 +68,9 @@ end
 while running do
     x, y, z = gps.locate()
 
+    if diffZ % 2 == 0 then
+        targetX = startX
+    end
     zigZagToLocation()
 
     sleep(0.5)
