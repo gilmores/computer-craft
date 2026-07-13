@@ -11,7 +11,6 @@ local leftTurn = true
 local function digForward()
     while turtle.detect() do
         turtle.dig()
-        sleep(0.5)
     end
     turtle.forward()
 end
