@@ -83,7 +83,7 @@ end
 
 local function placeBlockAboveIfWater()
     local blockPresent, blockData = turtle.inspectUp()
-    if blockData.name == "minecraft:water" then
+    if blockData.name == "minecraft:water" and blockData.state.level == 0 then
         equipStoneBlock()
         turtle.placeUp()
     end
