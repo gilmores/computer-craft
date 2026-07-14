@@ -15,6 +15,31 @@ local function digForward()
     turtle.forward()
 end
 
+local function equipStoneBlock()
+    local itemDetail = turtle.getItemDetail(nil, true)
+    if itemDetail == nil or not (itemDetail["tags"]["forge:stone"] or itemDetail["tags"]["forge:cobblestone"]) then
+        for i = 1, 16, 1 do
+            local itemDetails = turtle.getItemDetail(i, true)
+            if itemDetails ~= nil then
+                local itemTags = itemDetails["tags"]
+                if itemTags["forge:stone"] or itemTags["forge:cobblestone"] then
+                    turtle.select(i)
+                    return
+                end
+            end
+        end
+        print("Error: out of stone or cobblestone type blocks.")
+    end
+end
+
+local function placeBlockAboveIfWater()
+    local blockPresent, blockData = turtle.inspectUp()
+    if blockData.name == "minecraft:water" then
+        equipStoneBlock()
+        turtle.placeUp()
+    end
+end
+
 local function zigZagToLocation()
     -- End condition
     if x == targetX and y == endY and z == endZ then
@@ -45,11 +70,13 @@ local function zigZagToLocation()
         if leftTurn then
             turtle.turnLeft()
             digForward()
+            placeBlockAboveIfWater()
             turtle.turnLeft()
             leftTurn = false
         else
             turtle.turnRight()
             digForward()
+            placeBlockAboveIfWater()
             turtle.turnRight()
             leftTurn = true
         end
@@ -60,31 +87,6 @@ local function zigZagToLocation()
         end
     else
         digForward()
-    end
-end
-
-local function equipStoneBlock()
-    local itemDetail = turtle.getItemDetail(nil, true)
-    if itemDetail == nil or not (itemDetail["tags"]["forge:stone"] or itemDetail["tags"]["forge:cobblestone"]) then
-        for i = 1, 16, 1 do
-            local itemDetails = turtle.getItemDetail(i, true)
-            if itemDetails ~= nil then
-                local itemTags = itemDetails["tags"]
-                if itemTags["forge:stone"] or itemTags["forge:cobblestone"] then
-                    turtle.select(i)
-                    return
-                end
-            end
-        end
-        print("Error: out of stone or cobblestone type blocks.")
-    end
-end
-
-local function placeBlockAboveIfWater()
-    local blockPresent, blockData = turtle.inspectUp()
-    if blockData.name == "minecraft:water" and blockData.state.level == 0 then
-        equipStoneBlock()
-        turtle.placeUp()
     end
 end
 
